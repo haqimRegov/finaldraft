@@ -37,8 +37,6 @@ export default function Home() {
           <Link
             href="/signIn"
             className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
           >
             <h2 className={inter.className}>
               Log In <span>-&gt;</span>
@@ -51,8 +49,6 @@ export default function Home() {
           <Link
             href="/signUp"
             className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
           >
             <h2 className={inter.className}>
               Register <span>-&gt;</span>
