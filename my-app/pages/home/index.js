@@ -4,7 +4,7 @@ import Head from 'next/head';
 import Navbar from '@/components/Navbar';
 import Header from '@/components/Header';
 import { useAuthContext } from '@/components/Context';
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 export default function Home() {

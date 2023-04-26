@@ -1,6 +1,6 @@
 import {useState} from "react";
 import signIn from "@/config/signin";
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/router'
 import styles from "@/styles/Home.module.css"
 
 const SignIn = () => {

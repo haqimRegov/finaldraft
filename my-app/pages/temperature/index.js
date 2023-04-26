@@ -5,7 +5,7 @@ import { Chart, CategoryScale, LinearScale, PointElement, LineElement } from 'ch
 import { useEffect, useState } from "react";
 import moment from "moment";
 import { useAuthContext } from '@/components/Context';
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement);
 
