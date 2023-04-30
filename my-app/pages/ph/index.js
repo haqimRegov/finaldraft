@@ -4,6 +4,7 @@ import { Line } from "react-chartjs-2";
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement } from 'chart.js';
 import { useEffect, useState } from "react";
 import moment from "moment";
+import ProtectedRoute from "@/components/Protected";
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement);
 
@@ -74,9 +75,11 @@ const PH = () => {
     }
 
     return(
-        <div>
-            <Line data={phData} options={options}/>
-        </div>
+        <ProtectedRoute>
+            <div>
+                <Line data={phData} options={options}/>
+            </div>
+        </ProtectedRoute>
     )
 }
 

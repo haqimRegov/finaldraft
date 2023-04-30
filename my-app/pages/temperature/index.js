@@ -1,25 +1,32 @@
 import db from "@/config/firebase";
 import {ref, onValue} from "firebase/database"
-import { Line } from "react-chartjs-2";
-import { Chart, CategoryScale, LinearScale, PointElement, LineElement } from 'chart.js';
+import Layout from "@/components/Layout";
+import ProtectedRoute from "@/components/Protected";
+
 import { useEffect, useState } from "react";
-import moment from "moment";
-import { useAuthContext } from '@/components/Context';
+import { useAuthContext } from '@/config/Context';
 import { useRouter } from "next/router";
 
-Chart.register(CategoryScale, LinearScale, PointElement, LineElement);
+import { Bar, Line } from "react-chartjs-2";
+import { Chart, CategoryScale, LinearScale, PointElement, LineElement, BarElement } from 'chart.js';
+
+import moment from "moment";
+
+Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement);
 
 const Temperature = () => {
-    //SESSION
+
     const { user } = useAuthContext();
     const router = useRouter();
 
+    //SESSION
     useEffect(() => {
         if (user == null) router.push("/session")
     }, [user]) //SESSION
 
     const [date, setDate] = useState([])
     const [temp, setTemp] = useState([]) 
+
 
     useEffect(() => {
         const dbRef = ref(db, 'Water Quality');
@@ -28,16 +35,17 @@ const Temperature = () => {
             const data = await snapshot.val()
             console.log(data)
 
-            let dataDate = []
-            let dataTemp = []
+            let dataDate = [];
+            let dataTemp = [];
 
             snapshot.forEach(data => {
                 const dataVal = data.val();
                 dataDate.push(moment.unix(dataVal.epoch).format('MM-DD-YY h:mm A'))
                 dataTemp.push(dataVal.Temperature)
             })
-            console.log(dataDate)
-            while(dataDate > 6) {
+            console.log(dataDate);
+
+            while(dataDate.length > 10) {
                 dataDate.shift()
                 dataTemp.shift()
             }
@@ -46,7 +54,7 @@ const Temperature = () => {
             setTemp(dataTemp)
         })
 
-    }, [])
+        }, [])
 
     useEffect(() => {
         console.log(date)
@@ -74,7 +82,7 @@ const Temperature = () => {
                 }
             }],
             yAxes: [{
-                tickes: {
+                ticks: {
                     fontSize: 10,
                     min: 0,
                     max: 50
@@ -84,9 +92,13 @@ const Temperature = () => {
     }
 
     return(
-        <div>
-            <Line data={tempData} options={options}/>
-        </div>
+        <ProtectedRoute>
+            <Layout>
+                <div>
+                    <Line data={tempData} options={options}/>
+                </div> 
+            </Layout>
+        </ProtectedRoute>
     )
 }
 

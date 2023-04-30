@@ -1,9 +1,9 @@
 import Image from 'next/image';
 import styles from '@/styles/Home.module.css';
 import Head from 'next/head';
-import Navbar from '@/components/Navbar';
-import Header from '@/components/Header';
-import { useAuthContext } from '@/components/Context';
+import Layout from '@/components/Layout';
+import ProtectedRoute from '@/components/Protected';
+import { useAuthContext } from '@/config/Context';
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
@@ -18,17 +18,16 @@ export default function Home() {
 }, [])
 
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>FYP2</title>
-        <meta name="description" content="Created by Kasram"/>
-        <link rel='icon' href='/pro.ico'/>
-      </Head>
-      <div className={styles.container}>
-        <Header />
-        <Navbar />  
-      </div>
-    </div>
-
+    <ProtectedRoute>
+      <Layout>
+        <div>
+          <Head>
+            <title>FYP2</title>
+            <meta name="description" content="Created by Kasram"/>
+            <link rel='icon' href='/pro.ico'/>
+          </Head> 
+        </div>
+      </Layout>
+    </ProtectedRoute>
   )
 }

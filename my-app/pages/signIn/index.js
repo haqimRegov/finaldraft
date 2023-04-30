@@ -1,50 +1,55 @@
-import {useState} from "react";
-import signIn from "@/config/signin";
+import { useAuthContext } from "@/config/Context";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useRouter } from 'next/router'
-import styles from "@/styles/Home.module.css"
 import {
     Card,
-    Input,
-    Checkbox,
-    Button,
+    CardHeader,
+    CardBody,
+    CardFooter,
     Typography,
+    Input,
+    Button,
   } from "@material-tailwind/react";
 
 const SignIn = () => {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const {register, handleSubmit, formState:{errors}} = useForm();
+    const {signIn} = useAuthContext();
     const router = useRouter()
 
-    const handleForm = async (event) => {
-        event.preventDefault()
-
-        const { result, error } = await signIn(email, password);
-
-        if (error) {
-            return console.log(error)
-        }
-
-        // else successful
-        console.log(result)
-        return router.push("/home")
+    const handleForm = async (data) => {
+        try {
+            await signIn(data.email, data.password);
+            router.push("/home");
+          } catch (error) {
+            alert(error.message)
+          }
     }
+
     return (
-        <Card color="transparent" shadow={false}>
+        <div class="bg-black w-screen h-screen flex items-center justify-center">
+        <Card color="white" shadow={false} className="h-screen flex items-center justify-center rounded-s-2xl border-2 border-white">
             <Typography variant="h4" color="blue-gray">
                 Sign In
             </Typography>
-                <form onSubmit={handleForm} className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
-                    <label htmlFor="email">
-                        <input className="mb-4 flex flex-col gap-6" onChange={(e) => setEmail(e.target.value)} required type="email" name="email" id="email" placeholder="example@mail.com" />
-                    </label>
-                    <label htmlFor="password">
-                        <input className="mb-4 flex flex-col gap-6" onChange={(e) => setPassword(e.target.value)} required type="password" name="password" id="password" placeholder="password" />
-                    </label>
-                    <Button className="mt-6" fullWidth>
-                        Sign In
-                    </Button>
+                <form onSubmit={handleSubmit(handleForm)} className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
+                    <div className="mb-4 flex flex-col gap-6">
+                        <label htmlFor="email">
+                            <Input {...register("email", {required: "Email is required"})} type="email" placeholder="example@mail.com" />
+                        </label>
+                        {errors.email && <p className="text-red-400">{errors.email.message}</p>}
+                        <label htmlFor="password">
+                            <Input {...register("password", {required: "Password is required"})} type="password" placeholder="password"/>
+                        </label>
+                        {errors.password && <p className="text-red-400">{errors.password.message}</p>}
+                    </div>
+                        <Button type="submit" className="mt-6" fullWidth>
+                            Sign In
+                        </Button>
                 </form>        
-        </Card>);
+        </Card>
+        </div>
+    )
 }
 
 export default SignIn;
