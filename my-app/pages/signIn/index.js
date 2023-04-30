@@ -20,7 +20,7 @@ const SignIn = () => {
     const handleForm = async (data) => {
         try {
             await signIn(data.email, data.password);
-            router.push("/home");
+            //router.push("/home");
           } catch (error) {
             alert(error.message)
           }
