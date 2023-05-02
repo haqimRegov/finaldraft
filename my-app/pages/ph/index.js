@@ -5,6 +5,7 @@ import { Chart, CategoryScale, LinearScale, PointElement, LineElement } from 'ch
 import { useEffect, useState } from "react";
 import moment from "moment";
 import ProtectedRoute from "@/components/Protected";
+import Layout from "@/components/Layout";
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement);
 
@@ -28,7 +29,8 @@ const PH = () => {
                 dataPh.push(dataVal.pH)
             })
             console.log(dataDate)
-            while(dataDate > 6) {
+
+            while(dataDate.length > 20) {
                 dataDate.shift()
                 dataPh.shift()
             }
@@ -76,9 +78,11 @@ const PH = () => {
 
     return(
         <ProtectedRoute>
-            <div>
-                <Line data={phData} options={options}/>
-            </div>
+            <Layout>
+                <div>
+                    <Line data={phData} options={options}/>
+                </div>
+            </Layout>
         </ProtectedRoute>
     )
 }

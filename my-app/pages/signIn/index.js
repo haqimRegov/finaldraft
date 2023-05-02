@@ -1,7 +1,5 @@
 import { useAuthContext } from "@/config/Context";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useRouter } from 'next/router'
 import {
     Card,
     CardHeader,
@@ -15,40 +13,58 @@ import {
 const SignIn = () => {
     const {register, handleSubmit, formState:{errors}} = useForm();
     const {signIn} = useAuthContext();
-    const router = useRouter()
 
     const handleForm = async (data) => {
-        try {
-            await signIn(data.email, data.password);
-            //router.push("/home");
-          } catch (error) {
-            alert(error.message)
-          }
+        await signIn(data.email, data.password);
     }
 
     return (
-        <div class="bg-black w-screen h-screen flex items-center justify-center">
-        <Card color="white" shadow={false} className="h-screen flex items-center justify-center rounded-s-2xl border-2 border-white">
-            <Typography variant="h4" color="blue-gray">
-                Sign In
-            </Typography>
-                <form onSubmit={handleSubmit(handleForm)} className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
-                    <div className="mb-4 flex flex-col gap-6">
-                        <label htmlFor="email">
-                            <Input {...register("email", {required: "Email is required"})} type="email" placeholder="example@mail.com" />
-                        </label>
-                        {errors.email && <p className="text-red-400">{errors.email.message}</p>}
-                        <label htmlFor="password">
-                            <Input {...register("password", {required: "Password is required"})} type="password" placeholder="password"/>
-                        </label>
-                        {errors.password && <p className="text-red-400">{errors.password.message}</p>}
-                    </div>
-                        <Button type="submit" className="mt-6" fullWidth>
-                            Sign In
+        <form onSubmit={handleSubmit(handleForm)}>
+            <div className="bg-dark-brown w-screen h-screen flex items-center justify-center">
+                <Card className="w-2/6 h-4/6 rounded-2xl border-solid border-4 border-amber">
+                    <CardHeader
+                        variant="gradient"
+                        color="blue"
+                        className="mb-8 my-8 grid h-28 place-items-center"
+                    >
+                        <Typography variant="h3" color="white">
+                            SIGN IN
+                        </Typography>
+                    </CardHeader>
+
+                    <CardBody className="flex flex-col gap-4">
+                        <div className="mb-4 flex flex-col gap-6 justify-center">
+                            <label htmlFor="email">
+                                <Input {...register("email", {required: "Email is required"})} type="email" placeholder="example@mail.com"/>
+                            </label>
+                            {errors.email && <p className="text-red-400">{errors.email.message}</p>}
+                            <label htmlFor="password">
+                                <Input {...register("password", {required: "Password is required"})} type="password" placeholder="password"/>
+                            </label>
+                            {errors.password && <p className="text-red-400">{errors.password.message}</p>}
+                        </div>
+                    </CardBody>
+
+                    <CardFooter className="pt-0">
+                        <Button type="submit" variant="gradient" fullWidth>
+                          Sign In
                         </Button>
-                </form>        
-        </Card>
-        </div>
+                        <Typography variant="small" className="mt-6 flex justify-center">
+                          Don't have an account?
+                          <Typography
+                            as="a"
+                            href="/signUp"
+                            variant="small"
+                            color="blue"
+                            className="ml-1 font-bold"
+                          >
+                            Sign up
+                          </Typography>
+                        </Typography>
+                    </CardFooter>
+                </Card>
+            </div>
+        </form>
     )
 }
 

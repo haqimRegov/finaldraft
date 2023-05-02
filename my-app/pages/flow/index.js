@@ -5,6 +5,7 @@ import { Chart, CategoryScale, LinearScale, PointElement, LineElement } from 'ch
 import { useEffect, useState } from "react";
 import moment from "moment";
 import ProtectedRoute from "@/components/Protected";
+import Layout from "@/components/Layout";
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement);
 
@@ -28,7 +29,7 @@ const Flow = () => {
                 dataFlow.push(dataVal.Flow)
             })
             console.log(dataDate)
-            while(dataDate > 6) {
+            while(dataDate.length > 20) {
                 dataDate.shift()
                 dataFlow.shift()
             }
@@ -76,9 +77,11 @@ const Flow = () => {
 
     return(
         <ProtectedRoute>
+            <Layout>
             <div>
                 <Line data={flowData} options={options}/>
             </div>
+            </Layout>
         </ProtectedRoute>
     )
 }

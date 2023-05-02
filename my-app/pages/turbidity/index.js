@@ -5,12 +5,15 @@ import { Chart, CategoryScale, LinearScale, PointElement, LineElement } from 'ch
 import { useEffect, useState } from "react";
 import moment from "moment";
 import ProtectedRoute from "@/components/Protected";
+import Layout from "@/components/Layout";
+import { Alert } from "@material-tailwind/react";
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement);
 
 const Turbidity = () => {
     const [date, setDate] = useState([])
     const [turbidity, setTurbidity] = useState([])  
+    const [alert, setAlert] = useState(null)
 
     useEffect(() => {
         const dbRef = ref(db, 'Water Quality');
@@ -28,7 +31,8 @@ const Turbidity = () => {
                 dataTurb.push(dataVal.Turbidity)
             })
             console.log(dataDate)
-            while(dataDate > 6) {
+            
+            while(dataDate.length > 20) {
                 dataDate.shift()
                 dataTurb.shift()
             }
@@ -40,14 +44,25 @@ const Turbidity = () => {
     }, [])
 
     useEffect(() => {
-        console.log(date)
-    }, [date])
+        if (turbidity.length > 0 && turbidity[turbidity.length - 1] > 30) {
+            setAlert(
+                <Alert color="red">
+                    <div className="flex-1">
+                        <span className="text-xl font-bold block text-red-700">Turbidity Alert!</span>
+                        <p className="text-sm truncate">The water is becoming too cloudy</p>
+                    </div>
+                </Alert>
+            );
+        } else {
+            setAlert(null);
+        }
+    }, [turbidity]);
 
     const turbData = {
         labels: date ? [...date] : null,
         datasets: [
             {
-                label: 'Temperature',
+                label: 'Turbidity',
                 data: turbidity ? [...turbidity] : null,
                 borderColor: ['#eb596e'],
                 backgroundColor : ['#ff577f45'],
@@ -76,9 +91,14 @@ const Turbidity = () => {
 
     return(
         <ProtectedRoute>
-            <div>
-                <Line data={turbData} options={options}/>
-            </div>
+            <Layout>
+                <div className="flex w-full flex-col gap-2">
+                    {alert}
+                </div>
+                <div className="flex w-full flex-col gap-2">
+                    <Line data={turbData} options={options}/>
+                </div>  
+            </Layout>
         </ProtectedRoute>
     )
 }

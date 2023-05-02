@@ -2,9 +2,11 @@ import Navbar from '@/components/Navbar';
 
 const Layout = ({children}) => {
     return(
-        <div>
+        <div className='h-screen flex flex-row justify-start'>
             <Navbar />
-            <main>{children}</main>
+            <div className='flex-1 p-4'>
+                <main>{children}</main>
+            </div>
         </div>
     )
 }

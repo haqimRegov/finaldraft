@@ -1,14 +1,17 @@
 import {onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithRedirect, signOut} from 'firebase/auth';
 import { auth } from '@/config/firebase';
 import { createContext, useContext, useState, useEffect } from 'react';
+import { useRouter } from 'next/router'
 
 export const AuthContext = createContext({});
 
 export const useAuthContext = () => useContext(AuthContext);
 
 export const AuthContextProvider = ({children, }) => {
-    const [user, setUser] = useState({ email: null, uid: null });
+    const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true);
+
+    const router = useRouter()
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -26,33 +29,29 @@ export const AuthContextProvider = ({children, }) => {
         return () => unsubscribe();
     }, []);
 
-    const signUp = (email, password) => {
-        let result = null,
-            error = null;
-        try {
-            result = createUserWithEmailAndPassword(auth, email, password);
-        } catch (e) {
-            error = e;
-        }
-    
-        return { result, error };
+    const signUp = async(email, password) => {
+        await createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                setUser(userCredential.user);
+                router.push("/temperature")
+            })
+            .catch((error) => alert(error.message))
     }
 
-    const signIn = (email, password) => {
-        let result = null,
-            error = null;
-        try {
-            result = signInWithEmailAndPassword(auth, email, password);
-        } catch (e) {
-            error = e;
-        }
-    
-        return { result, error };
+    const signIn = async(email, password) => {
+        await signInWithEmailAndPassword(auth, email, password)
+			.then((userCredential) => {
+				setUser(userCredential.user);
+				router.push("/temperature");
+			})
+			.catch((error) => {(error.code === "auth/wrong-password" ? alert("Wrong Password") : alert(error.code))})
     }
 
     const logOut = async() => {
         setUser({ email: null, uid: null })
         await signOut(auth)
+            .then(router.push("/"))
+            .catch((error) => alert(error.message))
     }
 
     return (
