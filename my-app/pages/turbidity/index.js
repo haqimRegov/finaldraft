@@ -1,16 +1,41 @@
 import db from "@/config/firebase";
 import {ref, onValue} from "firebase/database"
-import { Line } from "react-chartjs-2";
-import { Chart, CategoryScale, LinearScale, PointElement, LineElement } from 'chart.js';
-import { useEffect, useState } from "react";
-import moment from "moment";
 import ProtectedRoute from "@/components/Protected";
 import Layout from "@/components/Layout";
+
+import { useEffect, useState } from "react";
+import { useAuthContext } from '@/config/Context';
+import { useRouter } from "next/router";
+
+import { Line } from "react-chartjs-2";
+import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Legend, Tooltip } from 'chart.js';
 import { Alert } from "@material-tailwind/react";
 
-Chart.register(CategoryScale, LinearScale, PointElement, LineElement);
+import moment from "moment";
+
+Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Legend, Tooltip);
 
 const Turbidity = () => {
+
+    const { user } = useAuthContext();
+    const router = useRouter();
+
+    const {
+        query: {temperature, waterflow, waterturb, waterph},
+    } = router;
+
+    const props = {
+        temperature,
+        waterflow,
+        waterturb,
+        waterph,
+    }
+
+    //SESSION
+    useEffect(() => {
+        if (user == null) router.push("/session")
+    }, [user]) //SESSION
+
     const [date, setDate] = useState([])
     const [turbidity, setTurbidity] = useState([])  
     const [alert, setAlert] = useState(null)
@@ -44,12 +69,12 @@ const Turbidity = () => {
     }, [])
 
     useEffect(() => {
-        if (turbidity.length > 0 && turbidity[turbidity.length - 1] > 30) {
+        if (turbidity.length > 0 && turbidity[turbidity.length - 1] > props.waterturb) {
             setAlert(
                 <Alert color="red">
                     <div className="flex-1">
                         <span className="text-xl font-bold block text-red-700">Turbidity Alert!</span>
-                        <p className="text-sm truncate">The water is becoming too cloudy</p>
+                        <p className="text-sm truncate">The water is becoming too cloudy {">"}{props.waterturb}</p>
                     </div>
                 </Alert>
             );

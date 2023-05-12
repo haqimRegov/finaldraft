@@ -1,17 +1,44 @@
 import db from "@/config/firebase";
 import {ref, onValue} from "firebase/database"
-import { Line } from "react-chartjs-2";
-import { Chart, CategoryScale, LinearScale, PointElement, LineElement } from 'chart.js';
-import { useEffect, useState } from "react";
-import moment from "moment";
 import ProtectedRoute from "@/components/Protected";
 import Layout from "@/components/Layout";
 
-Chart.register(CategoryScale, LinearScale, PointElement, LineElement);
+import { useEffect, useState } from "react";
+import { useAuthContext } from '@/config/Context';
+import { useRouter } from "next/router";
+
+import { Line } from "react-chartjs-2";
+import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Legend, Tooltip } from 'chart.js';
+import { Alert } from "@material-tailwind/react";
+
+import moment from "moment";
+
+Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Legend, Tooltip);
 
 const Flow = () => {
+
+    const { user } = useAuthContext();
+    const router = useRouter();
+
+    const {
+        query: {temperature, waterflow, waterturb, waterph},
+    } = router;
+
+    const props = {
+        temperature,
+        waterflow,
+        waterturb,
+        waterph,
+    }
+
+    //SESSION
+    useEffect(() => {
+        if (user == null) router.push("/session")
+    }, [user]) //SESSION
+
     const [date, setDate] = useState([])
     const [flow, setFlow] = useState([])
+    const [alert, setAlert] = useState(null);
 
     useEffect(() => {
         const dbRef = ref(db, 'Water Quality');
@@ -43,6 +70,21 @@ const Flow = () => {
     useEffect(() => {
         console.log(date)
     }, [date])
+
+    useEffect(() => {
+        if (flow.length > 0 && flow[flow.length - 1] > props.waterflow) {
+            setAlert(
+                <Alert color="red">
+                    <div className="flex-1">
+                        <span className="text-xl font-bold block text-red-700">Water Flow Alert!</span>
+                        <p className="text-sm truncate">The water flow has exceeded {props.waterflow} L/HOUR.</p>
+                    </div>
+                </Alert>
+            );
+        } else {
+            setAlert(null);
+        }
+    }, [flow]);
 
     const flowData = {
         labels: date ? [...date] : null,
@@ -78,6 +120,9 @@ const Flow = () => {
     return(
         <ProtectedRoute>
             <Layout>
+            <div className="flex w-full flex-col gap-2">
+                    {alert}
+            </div>
             <div>
                 <Line data={flowData} options={options}/>
             </div>

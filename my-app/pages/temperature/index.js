@@ -1,7 +1,7 @@
 import db from "@/config/firebase";
 import {ref, onValue} from "firebase/database"
-import Layout from "@/components/Layout";
 import ProtectedRoute from "@/components/Protected";
+import Layout from "@/components/Layout";
 
 import { useEffect, useState } from "react";
 import { useAuthContext } from '@/config/Context';
@@ -19,6 +19,17 @@ const Temperature = () => {
 
     const { user } = useAuthContext();
     const router = useRouter();
+
+    const {
+        query: {temperature, waterflow, waterturb, waterph},
+    } = router;
+
+    const props = {
+        temperature,
+        waterflow,
+        waterturb,
+        waterph,
+    }
 
     //SESSION
     useEffect(() => {
@@ -59,12 +70,12 @@ const Temperature = () => {
         }, [])
 
     useEffect(() => {
-        if (temp.length > 0 && temp[temp.length - 1] > 30) {
+        if (temp.length > 0 && temp[temp.length - 1] > props.temperature) {
             setAlert(
                 <Alert color="red">
                     <div className="flex-1">
                         <span className="text-xl font-bold block text-red-700">Temperature Alert!</span>
-                        <p className="text-sm truncate">The temperature has exceeded 30 degrees Celsius.</p>
+                        <p className="text-sm truncate">The temperature has exceeded {props.temperature} degrees Celsius.</p>
                     </div>
                 </Alert>
             );

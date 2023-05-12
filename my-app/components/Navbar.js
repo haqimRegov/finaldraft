@@ -30,6 +30,7 @@ const Navbar = () => {
       {id: 2, label: "Water Flow", icon: <BsWater />, link: "/flow"},
       {id: 3, label: "Turbidity", icon: <MdDirtyLens />, link: "/turbidity"},
       {id: 4, label: "pH", icon: <MdOpacity />, link: "/ph"},
+      {id: 5, label: "Setup", icon: <MdOpacity />, link: "/setup"},
     ]
 
     const activeMenu = useMemo(() => menuItems.find(menu => menu.link === router.pathname), [router.pathname])

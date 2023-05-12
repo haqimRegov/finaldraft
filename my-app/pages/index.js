@@ -14,7 +14,7 @@ export default function Home() {
       <div className='container mx-auto md:px-20'>
         <h1 className='font-bold text-7xl pb-12 text-center text-white'>WELCOME</h1>
 
-        {Slide()}
+        <Slide />
 
       </div>
     </section>
@@ -26,12 +26,12 @@ function Slide() {
   return(
     <div className='grid md:grid-cols-2'>
       <div className='image'>
-        <Image src={"/images/logo.png"} width={1000} height={600} />
+        <Image src={"/images/unitenlogo.png"} width={1000} height={600} />
       </div>
       <div className='info bg-amber'>
         <div className='cat'>
-          <a className='text-amber'>by IrfanKasram</a>
-          <a className='text-amber'>- Sem2 2022/2023</a>
+          <a className='text-dark-brown'>by IrfanKasram</a>
+          <a className='text-dark-brown'>- Sem2 2022/2023</a>
         </div>
         <div className='title'>
           <a className='text-3xl md:text-6xl font-bold text-dark-brown'>Water Quality Monitoring System</a>

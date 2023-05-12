@@ -1,17 +1,44 @@
 import db from "@/config/firebase";
 import {ref, onValue} from "firebase/database"
-import { Line } from "react-chartjs-2";
-import { Chart, CategoryScale, LinearScale, PointElement, LineElement } from 'chart.js';
-import { useEffect, useState } from "react";
-import moment from "moment";
 import ProtectedRoute from "@/components/Protected";
 import Layout from "@/components/Layout";
 
-Chart.register(CategoryScale, LinearScale, PointElement, LineElement);
+import { useEffect, useState } from "react";
+import { useAuthContext } from '@/config/Context';
+import { useRouter } from "next/router";
+
+import { Line } from "react-chartjs-2";
+import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Legend, Tooltip } from 'chart.js';
+import { Alert } from "@material-tailwind/react";
+
+import moment from "moment";
+
+Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Legend, Tooltip);
 
 const PH = () => {
+
+    const { user } = useAuthContext();
+    const router = useRouter();
+
+    const {
+        query: {temperature, waterflow, waterturb, waterph},
+    } = router;
+
+    const props = {
+        temperature,
+        waterflow,
+        waterturb,
+        waterph,
+    }
+
+    //SESSION
+    useEffect(() => {
+        if (user == null) router.push("/session")
+    }, [user]) //SESSION
+
     const [date, setDate] = useState([])
     const [ph, setPh] = useState([]) 
+    const [alert, setAlert] = useState(null)
 
     useEffect(() => {
         const dbRef = ref(db, 'Water Quality');
@@ -44,6 +71,21 @@ const PH = () => {
     useEffect(() => {
         console.log(date)
     }, [date])
+
+    useEffect(() => {
+        if (ph.length > 0 && ph[ph.length - 1] > props.waterph) {
+            setAlert(
+                <Alert color="red">
+                    <div className="flex-1">
+                        <span className="text-xl font-bold block text-red-700">pH Alert!</span>
+                        <p className="text-sm truncate">The water pH level is currently {props.waterph}</p>
+                    </div>
+                </Alert>
+            );
+        } else {
+            setAlert(null);
+        }
+    }, [ph]);
 
     const phData = {
         labels: date ? [...date] : null,
@@ -79,6 +121,9 @@ const PH = () => {
     return(
         <ProtectedRoute>
             <Layout>
+                <div className="flex w-full flex-col gap-2">
+                    {alert}
+                </div>
                 <div>
                     <Line data={phData} options={options}/>
                 </div>

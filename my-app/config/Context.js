@@ -1,4 +1,4 @@
-import {onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithRedirect, signOut} from 'firebase/auth';
+import {onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut} from 'firebase/auth';
 import { auth } from '@/config/firebase';
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/router'
