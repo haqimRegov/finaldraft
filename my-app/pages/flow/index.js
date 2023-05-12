@@ -17,19 +17,8 @@ Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Legend, To
 
 const Flow = () => {
 
-    const { user } = useAuthContext();
+    const { user, waterflow } = useAuthContext();
     const router = useRouter();
-
-    const {
-        query: {temperature, waterflow, waterturb, waterph},
-    } = router;
-
-    const props = {
-        temperature,
-        waterflow,
-        waterturb,
-        waterph,
-    }
 
     //SESSION
     useEffect(() => {
@@ -72,12 +61,12 @@ const Flow = () => {
     }, [date])
 
     useEffect(() => {
-        if (flow.length > 0 && flow[flow.length - 1] > props.waterflow) {
+        if (flow.length > 0 && flow[flow.length - 1] > waterflow) {
             setAlert(
                 <Alert color="red">
                     <div className="flex-1">
                         <span className="text-xl font-bold block text-red-700">Water Flow Alert!</span>
-                        <p className="text-sm truncate">The water flow has exceeded {props.waterflow} L/HOUR.</p>
+                        <p className="text-sm truncate">The water flow has exceeded {waterflow} L/HOUR.</p>
                     </div>
                 </Alert>
             );

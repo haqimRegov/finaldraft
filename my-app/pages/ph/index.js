@@ -17,19 +17,8 @@ Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Legend, To
 
 const PH = () => {
 
-    const { user } = useAuthContext();
+    const { user, waterph } = useAuthContext();
     const router = useRouter();
-
-    const {
-        query: {temperature, waterflow, waterturb, waterph},
-    } = router;
-
-    const props = {
-        temperature,
-        waterflow,
-        waterturb,
-        waterph,
-    }
 
     //SESSION
     useEffect(() => {
@@ -73,12 +62,12 @@ const PH = () => {
     }, [date])
 
     useEffect(() => {
-        if (ph.length > 0 && ph[ph.length - 1] > props.waterph) {
+        if (ph.length > 0 && ph[ph.length - 1] > waterph) {
             setAlert(
                 <Alert color="red">
                     <div className="flex-1">
                         <span className="text-xl font-bold block text-red-700">pH Alert!</span>
-                        <p className="text-sm truncate">The water pH level is currently {props.waterph}</p>
+                        <p className="text-sm truncate">The water pH level is currently {waterph}</p>
                     </div>
                 </Alert>
             );

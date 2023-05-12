@@ -17,19 +17,8 @@ Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Legend, To
 
 const Turbidity = () => {
 
-    const { user } = useAuthContext();
+    const { user, waterturb } = useAuthContext();
     const router = useRouter();
-
-    const {
-        query: {temperature, waterflow, waterturb, waterph},
-    } = router;
-
-    const props = {
-        temperature,
-        waterflow,
-        waterturb,
-        waterph,
-    }
 
     //SESSION
     useEffect(() => {
@@ -69,12 +58,12 @@ const Turbidity = () => {
     }, [])
 
     useEffect(() => {
-        if (turbidity.length > 0 && turbidity[turbidity.length - 1] > props.waterturb) {
+        if (turbidity.length > 0 && turbidity[turbidity.length - 1] > waterturb) {
             setAlert(
                 <Alert color="red">
                     <div className="flex-1">
                         <span className="text-xl font-bold block text-red-700">Turbidity Alert!</span>
-                        <p className="text-sm truncate">The water is becoming too cloudy {">"}{props.waterturb}</p>
+                        <p className="text-sm truncate">The water is becoming too cloudy {">"}{waterturb}</p>
                     </div>
                 </Alert>
             );

@@ -8,7 +8,11 @@ export const AuthContext = createContext({});
 export const useAuthContext = () => useContext(AuthContext);
 
 export const AuthContextProvider = ({children, }) => {
-    const [user, setUser] = useState(null)
+    const [temperature, setTemperature] = useState([]);
+    const [waterflow, setWaterflow] = useState([]);
+    const [waterturb, setWaterturb] = useState([]);
+    const [waterph, setWaterph] = useState([]);
+    const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
     const router = useRouter()
@@ -54,8 +58,15 @@ export const AuthContextProvider = ({children, }) => {
             .catch((error) => alert(error.message))
     }
 
+    const handleForm = (val) => {
+        setTemperature(val.temperature)
+        setWaterflow(val.waterflow)
+        setWaterturb(val.waterturb)
+        setWaterph(val.waterph)
+    }
+
     return (
-        <AuthContext.Provider value={{ user, signUp, signIn, logOut }}>
+        <AuthContext.Provider value={{ user, signUp, signIn, logOut, temperature, waterflow, waterturb, waterph, handleForm }}>
             {loading ? <div>Loading...</div> : children}
         </AuthContext.Provider>
     );

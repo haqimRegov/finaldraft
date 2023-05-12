@@ -17,19 +17,8 @@ Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Legend, To
 
 const Temperature = () => {
 
-    const { user } = useAuthContext();
+    const { user, temperature } = useAuthContext();
     const router = useRouter();
-
-    const {
-        query: {temperature, waterflow, waterturb, waterph},
-    } = router;
-
-    const props = {
-        temperature,
-        waterflow,
-        waterturb,
-        waterph,
-    }
 
     //SESSION
     useEffect(() => {
@@ -70,12 +59,12 @@ const Temperature = () => {
         }, [])
 
     useEffect(() => {
-        if (temp.length > 0 && temp[temp.length - 1] > props.temperature) {
+        if (temp.length > 0 && temp[temp.length - 1] > temperature) {
             setAlert(
                 <Alert color="red">
                     <div className="flex-1">
                         <span className="text-xl font-bold block text-red-700">Temperature Alert!</span>
-                        <p className="text-sm truncate">The temperature has exceeded {props.temperature} degrees Celsius.</p>
+                        <p className="text-sm truncate">The temperature has exceeded {temperature} degrees Celsius.</p>
                     </div>
                 </Alert>
             );
