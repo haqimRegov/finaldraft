@@ -58,11 +58,13 @@ export const AuthContextProvider = ({children, }) => {
             .catch((error) => alert(error.message))
     }
 
-    const handleForm = (val) => {
+    const handleForm = async(val) => {
         setTemperature(val.temperature)
         setWaterflow(val.waterflow)
         setWaterturb(val.waterturb)
         setWaterph(val.waterph)
+
+        router.push("/temperature")
     }
 
     return (

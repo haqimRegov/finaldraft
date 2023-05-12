@@ -28,9 +28,8 @@ import {
     
     }
 
-    const handleSubmit = () => {
-      handleForm(data)
-      Router.push("/temperature")
+    const handleSubmit = async() => {
+      await handleForm(data)
     }
 
     return (
