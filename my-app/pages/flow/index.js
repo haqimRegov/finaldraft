@@ -61,6 +61,8 @@ const Flow = () => {
     }, [date])
 
     useEffect(() => {
+        //const waterflow = parseFloat(localStorage.getItem('waterflow'));
+
         if (flow.length > 0 && flow[flow.length - 1] > waterflow) {
             setAlert(
                 <Alert color="red">

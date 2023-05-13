@@ -8,6 +8,7 @@ export const AuthContext = createContext({});
 export const useAuthContext = () => useContext(AuthContext);
 
 export const AuthContextProvider = ({children, }) => {
+
     const [temperature, setTemperature] = useState([]);
     const [waterflow, setWaterflow] = useState([]);
     const [waterturb, setWaterturb] = useState([]);
@@ -26,6 +27,18 @@ export const AuthContextProvider = ({children, }) => {
                 });
             } else {
                 setUser({ email: null, uid: null });
+            }
+
+            const temperature = JSON.parse(localStorage.getItem("temperature"));
+            const waterflow = JSON.parse(localStorage.getItem("waterflow"));
+            const waterturb = JSON.parse(localStorage.getItem("waterturb"));
+            const waterph = JSON.parse(localStorage.getItem("waterph"));
+
+            if (temperature && waterflow && waterturb && waterph) {
+              setTemperature(temperature);
+              setWaterflow(waterflow);
+              setWaterturb(waterturb);
+              setWaterph(waterph);
             }
             setLoading(false);
         });
@@ -59,10 +72,10 @@ export const AuthContextProvider = ({children, }) => {
     }
 
     const handleForm = async(val) => {
-        setTemperature(val.temperature)
-        setWaterflow(val.waterflow)
-        setWaterturb(val.waterturb)
-        setWaterph(val.waterph)
+        localStorage.setItem("temperature", JSON.stringify(val.temperature));
+        localStorage.setItem("waterflow", JSON.stringify(val.waterflow));
+        localStorage.setItem("waterturb", JSON.stringify(val.waterturb));
+        localStorage.setItem("waterph", JSON.stringify(val.waterph));
 
         router.push("/temperature")
     }

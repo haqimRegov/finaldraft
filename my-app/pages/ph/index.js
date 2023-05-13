@@ -62,6 +62,10 @@ const PH = () => {
     }, [date])
 
     useEffect(() => {
+        //const waterph = parseInt(localStorage.getItem('waterph'));
+
+        console.log(waterph)
+
         if (ph.length > 0 && ph[ph.length - 1] > waterph) {
             setAlert(
                 <Alert color="red">

@@ -58,6 +58,8 @@ const Turbidity = () => {
     }, [])
 
     useEffect(() => {
+        //const waterturb = parseFloat(localStorage.getItem('waterturb'));
+
         if (turbidity.length > 0 && turbidity[turbidity.length - 1] > waterturb) {
             setAlert(
                 <Alert color="red">

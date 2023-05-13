@@ -59,6 +59,8 @@ const Temperature = () => {
         }, [])
 
     useEffect(() => {
+        //const temperature = parseFloat(localStorage.getItem('temperature'));
+
         if (temp.length > 0 && temp[temp.length - 1] > temperature) {
             setAlert(
                 <Alert color="red">
