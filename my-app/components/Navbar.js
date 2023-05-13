@@ -55,7 +55,7 @@ const Navbar = () => {
     const wrapperClasses = classNames(
       "h-screen px-4 pt-8 pb-4 bg-dark-brown h-screen flex justify-between flex-col duration-100", 
       {
-        ["w-80"]: open,
+        ["w-72"]: open,
         ["w-20"]: !open,
 
       })
@@ -99,9 +99,9 @@ const Navbar = () => {
       <div className={wrapperClasses}>
         <div className="flex flex-col">
           <div className="flex items-center justify-between relative">
-            <div className="inline-flex items-center pl-1 gap-4">
+            <div className="inline-flex items-center pl-1 gap-0">
               <WiCloudUp className={cloudClasses}/>
-              <h1 className={wqmsClasses}>{user.email}</h1>
+              <h5 className={wqmsClasses}>{user.email}</h5>
             </div>
             {isCollapsible && (
               <button className={arrowClasses} onClick={handleClick}>
